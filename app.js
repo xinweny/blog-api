@@ -1,10 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
 
+import configMongoDB from './config/mongoConfig.js';
 import configPassport from './config/passportConfig.js';
 
 import apiRouter from './routes/api.js';
 import authRouter from './routes/auth.js';
+
+configMongoDB();
 
 const app = express();
 
