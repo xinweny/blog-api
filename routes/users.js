@@ -6,7 +6,11 @@ import postController from '../controllers/postController.js';
 const userRouter = Router();
 
 userRouter.get('/', userController.listUsers);
+
 userRouter.get('/:userId/posts', postController.getUserPosts);
+
 userRouter.get('/:userId', userController.getUser);
+
+userRouter.put('/:userId', userController.updateUser);
 
 export default userRouter;
