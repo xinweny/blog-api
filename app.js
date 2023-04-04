@@ -10,6 +10,9 @@ configMongoDB();
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 configPassport();
 
 app.use('/api', apiRouter);
