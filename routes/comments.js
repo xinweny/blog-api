@@ -4,7 +4,7 @@ import commentController from '../controllers/commentController.js';
 
 const commentRouter = Router();
 
-commentRouter.get('/', commentController.getComments);
+commentRouter.get('/', commentController.getCommentsByPost);
 
 commentRouter.post('/', commentController.createComment);
 

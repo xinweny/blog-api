@@ -1,5 +1,23 @@
-const getComments = (req, res) => {
-  res.send('TODO: List comments of post');
+import Comment from '../models/comment.js';
+
+const getCommentsByPost = async (req, res, next) => {
+  try {
+    const comments = await Comment.find({ postId: req.params.postId });
+
+    res.json({ data: { comments } });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const getCommentsByUser = async (req, res, next) => {
+  try {
+    const comments = await Comment.find({ userId: req.params.userId });
+
+    res.json({ data: { comments } });
+  } catch (err) {
+    return next(err);
+  }
 };
 
 const createComment = (req, res) => {
@@ -11,7 +29,8 @@ const deleteComment = (req, res) => {
 };
 
 export default {
-  getComments,
+  getCommentsByPost,
+  getCommentsByUser,
   createComment,
   deleteComment,
 }
