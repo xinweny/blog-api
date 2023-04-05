@@ -1,8 +1,10 @@
-const listUsers = (req, res) => {
+import User from '../models/user.js';
+
+const getUsers = (req, res) => {
   res.send('TODO: Implement list users');
 };
 
-const getUser = (req, res) => {
+const getUser = async (req, res, next) => {
   res.send('TODO: Implement get user profile');
 };
 
@@ -11,7 +13,7 @@ const updateUser = (req, res) => {
 };
 
 export default {
-  listUsers,
+  getUsers,
   getUser,
   updateUser,
 };

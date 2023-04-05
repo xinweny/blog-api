@@ -6,7 +6,7 @@ import commentController from '../controllers/commentController.js';
 
 const userRouter = Router();
 
-userRouter.get('/', userController.listUsers);
+userRouter.get('/', userController.getUsers);
 
 userRouter.get('/:userId/posts', postController.getPostsByUser);
 
