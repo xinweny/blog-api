@@ -51,9 +51,7 @@ const login = (req, res) => {
         { expiresIn: '1d' },
       );
 
-      return res.json({
-        data: { user, token },
-      });
+      return res.json({ data: { user, token } });
     }
   )(req, res);
 };
