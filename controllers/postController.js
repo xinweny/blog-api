@@ -65,10 +65,6 @@ const deletePost = (req, res) => {
   res.send('TODO: Delete post');
 };
 
-const getUserPosts = (req, res) => {
-  res.send('TODO: Get posts by userID');
-};
-
 export default {
   getPosts,
   getPostsByUser,
@@ -76,5 +72,4 @@ export default {
   createPost,
   updatePost,
   deletePost,
-  getUserPosts,
 };
