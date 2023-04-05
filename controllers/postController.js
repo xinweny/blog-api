@@ -1,9 +1,8 @@
 import Post from '../models/post.js';
-import Comment from '../models/comment.js';
 
-const listPosts = async (req, res, next) => {
+const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({}).populate('user');
+    const posts = await Post.find({});
 
     res.json({ data: { posts } });
   } catch (err) {
@@ -11,14 +10,21 @@ const listPosts = async (req, res, next) => {
   }
 };
 
+const getPostsByUser = async (req, res, next) => {
+  try {
+    const posts = await Post.find({ userId: req.params.userId });
+
+    res.json({ data: { posts } });
+  } catch (err) {
+    return next(err);
+  }
+}; 
+
 const getPost = async (req, res, next) => {
   try {
-    const [post, comments] = await Promise.all([
-      Post.findById(req.params.postId).populate('user'),
-      Comment.find({ postId: req.params.postId }).populate('user'),
-    ]);
+    const post = await Post.findById(req.params.postId);
 
-    res.json({ data: { post, comments } });
+    res.json({ data: { post } });
   } catch (err) {
     return next(err);
   }
@@ -41,7 +47,8 @@ const getUserPosts = (req, res) => {
 };
 
 export default {
-  listPosts,
+  getPosts,
+  getPostsByUser,
   getPost,
   createPost,
   updatePost,
