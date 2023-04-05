@@ -1,8 +1,8 @@
+import { customError } from '../utils/error.js';
+
 const handleErrors = app => {
   app.use((req, res, next) => {
-    const err = new Error('Resource not found.');
-    err.status = 404;
-    next(err);
+    next(customError(404, 'Resource not found.'));
   });
 
   app.use((err, req, res, next) => {
