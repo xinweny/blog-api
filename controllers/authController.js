@@ -23,7 +23,6 @@ const register = [
     await user.save();
 
     res.status(200).json({
-      status: 'success',
       message: 'User created successfully.',
     });
   }
@@ -33,17 +32,16 @@ const login = (req, res) => {
   passport.authenticate('local', { session: 'false' },
     (err, user, info) => {
       if (err || !user) return res.status(400).json({
-        status: 'error',
-        code: 400,
-        message: info.message,
+        error: { code: 400, message: info.message },
       });
 
       req.login(user, { session: 'false' }, err => {
         if (!user) return res.status(400).json({
-          status: 'error',
-          code: 400,
-          data: err,
-          message: 'Unexpected error logging in.',
+          error: {
+            code: 400,
+            data: err,
+            message: 'Unexpected error logging in.',
+          },
         });
       });
 
@@ -54,9 +52,7 @@ const login = (req, res) => {
       );
 
       return res.json({
-        status: 'success',
         data: { user, token },
-        message: 'User logged in successfully.',
       });
     }
   )(req, res);
