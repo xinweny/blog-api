@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 import User from '../models/user.js';
 
-const configPassport = () => {
+const configPassport = app => {
   passport.use(new LocalStrategy(
     {
       usernameField: 'username',
@@ -43,6 +43,8 @@ const configPassport = () => {
       }
     }
   ));
+
+  app.use(passport.initialize());
 };
 
 export default configPassport;

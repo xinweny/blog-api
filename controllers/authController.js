@@ -38,15 +38,19 @@ const login = (req, res) => {
       });
 
       req.login(user, { session: 'false' }, err => {
-        if (err) return res.status(400).json({
+        if (!user) return res.status(400).json({
           status: 400,
           message: err,
         });
       });
 
-      const token = jwt.sign(user, process.env.JWT_SECRET_KEY);
+      const token = jwt.sign(
+        user.toJSON(),
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: '1d' },
+      );
 
-      return res.json({ user, token });
+      return res.json({ status: 200, user, token });
     }
   )(req, res);
 };
