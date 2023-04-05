@@ -1,5 +1,8 @@
 import Post from '../models/post.js';
 
+import { authenticateToken } from '../utils/auth.js';
+import { validateAndSanitizePost, checkForValidationErrors } from '../utils/validators.js';
+
 const getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find({});
@@ -30,9 +33,29 @@ const getPost = async (req, res, next) => {
   }
 };
 
-const createPost = (req, res) => {
-  res.send('TODO: Create post');
-};
+const createPost = [
+  authenticateToken,
+  ...validateAndSanitizePost(),
+  checkForValidationErrors,
+  async (req, res, next) => {
+    try {
+      const post = new Post({
+        userId: req.user._id,
+        title: req.body.title,
+        text: req.body.text,
+        likesCount: 0,
+        published: req.body.published,
+        createdAt: new Date(),
+      });
+  
+      await post.save();
+  
+      res.json({ data: post, message: 'Post created successfully.' });
+    } catch (err) {
+      return next(err);
+    }
+  },
+];
 
 const updatePost = (req, res) => {
   res.send('TODO: Update post');

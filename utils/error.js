@@ -3,7 +3,7 @@ const customError = (statusCode, msg) => {
   error.status = statusCode;
   
   return error;
-}
+};
 
 export {
   customError,

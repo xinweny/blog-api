@@ -1,17 +1,34 @@
 import { body, validationResult } from 'express-validator';
 
+import { capitalize } from './helpers.js';
+
 const checkIfExistsInDB = (collection, field) => {
   return async value => {
     const user = await collection.findOne({ [field]: value });
 
-    if (user) return Promise.reject(`${field.charAt(0).toUpperCase() + field.slice(1)} is already in use.`);
+    if (user) return Promise.reject(`${capitalize(field)} is already in use.`);
   };
 }
 
-const trimAndEscape = field => body(field).trim().escape();
+const checkForValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(400).json({
+      code: 400,
+      errors: errors.array(),
+      data: req.body,
+    });
+
+    return;
+  }
+  
+  next();
+}
 
 const validateAndSanitizeUser = userModel => [
-  trimAndEscape('username')
+  body('username')
+    .trim().isLength({ min: 1 }).withMessage(`${capitalize('username')} is required.`).escape()
     .custom(checkIfExistsInDB(userModel, 'username')),
   body('email')
     .isEmail().withMessage('Please enter a valid email address.')
@@ -23,24 +40,17 @@ const validateAndSanitizeUser = userModel => [
     .withMessage('Passwords do not match.'),
 ];
 
-const checkForValidationErrors = (req, res, next) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    const code = 400;
-
-    res.status(code).json({
-      error: {
-        code,
-        message: errors.array(),
-      }
-    });
-  } else {
-    next();
-  }
-}
+const validateAndSanitizePost = () => [
+  body('title')
+    .isLength({ min: 1 }).withMessage(`${capitalize('title')} is required.`).escape(),
+  body('text')
+    .isLength({ min: 1 }).withMessage(`${capitalize('username')} is required.`).escape(),
+  body('published')
+    .isBoolean(),
+]
 
 export {
   checkForValidationErrors,
   validateAndSanitizeUser,
+  validateAndSanitizePost,
 };
