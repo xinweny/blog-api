@@ -7,4 +7,4 @@ const customError = (statusCode, msg) => {
 
 export {
   customError,
-}
+};
