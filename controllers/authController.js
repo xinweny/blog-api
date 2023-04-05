@@ -23,7 +23,7 @@ const register = [
     await user.save();
 
     res.status(200).json({
-      status: 200,
+      status: 'success',
       message: 'User created successfully.',
     });
   }
@@ -33,14 +33,17 @@ const login = (req, res) => {
   passport.authenticate('local', { session: 'false' },
     (err, user, info) => {
       if (err || !user) return res.status(400).json({
-        status: 400,
+        status: 'error',
+        code: 400,
         message: info.message,
       });
 
       req.login(user, { session: 'false' }, err => {
         if (!user) return res.status(400).json({
-          status: 400,
-          message: err,
+          status: 'error',
+          code: 400,
+          data: err,
+          message: 'Unexpected error logging in.',
         });
       });
 
@@ -50,13 +53,18 @@ const login = (req, res) => {
         { expiresIn: '1d' },
       );
 
-      return res.json({ status: 200, user, token });
+      return res.json({
+        status: 'success',
+        data: { user, token },
+        message: 'User logged in successfully.',
+      });
     }
   )(req, res);
 };
 
-const logout = (req, res) => {
-  res.send('TODO: Implement logout');
+const logout = () => {
+  // Logout functionality to be implemented client-side
+  console.log('User logged out.');
 };
 
 export default {
