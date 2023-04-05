@@ -4,7 +4,7 @@ import postController from '../controllers/postController.js';
 
 const postRouter = Router();
 
-postRouter.get('/', postController.listPosts);
+postRouter.get('/', postController.getPosts);
 
 postRouter.post('/', postController.createPost);
 
