@@ -1,14 +1,7 @@
-const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers.authorization;
+import passport from 'passport';
 
-  if (typeof bearerHeader === 'undefined') res.sendStatus(403);
-
-  const bearerToken = bearerHeader.split(' ')[1];
-  req.token = bearerToken;
-
-  next();
-}
+const authenticateToken = passport.authenticate('jwt', { session: false });
 
 export {
-  verifyToken,
+  authenticateToken,
 }

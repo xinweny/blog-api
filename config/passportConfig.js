@@ -35,7 +35,9 @@ const configPassport = app => {
     },
     async (jwtPayload, done) => {
       try {
-        const user = await User.findById(jwtPayload.id);
+        const user = await User.findById(jwtPayload.user._id, '-password -createdAt');
+
+        if (!user) return done(null, false);
 
         return done(null, user);
       } catch (err) {
