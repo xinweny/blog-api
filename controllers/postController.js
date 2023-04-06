@@ -58,9 +58,32 @@ const createPost = [
   },
 ];
 
-const updatePost = (req, res) => {
-  res.send('TODO: Update post');
-};
+const updatePost = [
+  authenticateToken,
+  ...validateAndSanitizePost(),
+  checkForValidationErrors,
+  async (req, res, next) => {
+    try {
+      const post = await Post.findById(req.params.postId);
+
+      if (req.user.id !== post.userId.toString()) throw customError(401, 'Unauthorized');
+  
+      const updatedPost = await Post.findByIdAndUpdate(post.id, {
+        title: req.body.title,
+        text: req.body.text,
+        published: req.body.published,
+        updatedAt: new Date(),
+      }, { new: true });
+  
+      res.json({
+        data: { post: updatedPost },
+        message: 'Post updated successfully.',
+      });
+    } catch (err) {
+      return next(err);
+    }
+  },
+];
 
 const deletePost = [
   authenticateToken,
