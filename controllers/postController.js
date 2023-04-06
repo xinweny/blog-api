@@ -2,6 +2,7 @@ import Post from '../models/post.js';
 
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizePost, checkForValidationErrors } from '../utils/validators.js';
+import { customError } from '../utils/error.js';
 
 const getPosts = async (req, res, next) => {
   try {
@@ -61,9 +62,25 @@ const updatePost = (req, res) => {
   res.send('TODO: Update post');
 };
 
-const deletePost = (req, res) => {
-  res.send('TODO: Delete post');
-};
+const deletePost = [
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const post = await Post.findById(req.params.postId);
+
+      if (req.user.id !== post.userId.toString()) throw customError(401, 'Unauthorized');
+  
+      await Post.deleteOne(post);
+  
+      res.json({
+        data: { post },
+        message: 'Post successfully deleted.',
+      });
+    } catch (err) {
+      return next(err);
+    }
+  },
+];
 
 export default {
   getPosts,
