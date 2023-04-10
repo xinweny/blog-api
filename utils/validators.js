@@ -49,8 +49,14 @@ const validateAndSanitizePost = () => [
     .isBoolean(),
 ]
 
+const validateAndSanitizeComment = () => [
+  body('text')
+  .isLength({ min: 1 }).withMessage(`${capitalize('title')} is required.`).escape(),
+];
+
 export {
   checkForValidationErrors,
   validateAndSanitizeUser,
   validateAndSanitizePost,
+  validateAndSanitizeComment,
 };
