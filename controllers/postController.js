@@ -51,7 +51,10 @@ const createPost = [
   
       await post.save();
   
-      res.json({ data: post, message: 'Post created successfully.' });
+      res.json({
+        data: post,
+        message: 'Post created successfully.'
+      });
     } catch (err) {
       return next(err);
     }
