@@ -1,15 +1,23 @@
 import User from '../models/user.js';
 
-const getUsers = async (req, res, next) => {
-  try {
-    const users = await User.find({}, '-password');
+import { authenticateToken } from '../utils/auth.js';
+import { customError } from '../utils/error.js';
 
-    res.json({ data: { users }});
-  } catch (err) {
-    return next(err);
-  }
-  
-};
+const getUsers = [
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      if (req.user.role !== 'admin') throw customError(401, 'Unauthorized');
+
+      const users = await User.find({}, '-password');
+
+      res.json({ data: { users }});
+    } catch (err) {
+      return next(err);
+    }
+    
+  },
+];
 
 const getUser = async (req, res, next) => {
   try {
