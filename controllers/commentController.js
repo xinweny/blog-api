@@ -29,10 +29,11 @@ const createComment = [
   ...validateAndSanitizeComment(),
   checkForValidationErrors,
   async (req, res, next) => {
+    console.log(req.params);
     try {
       const comment = new Comment({
         userId: req.user.id,
-        postId: req.body.post_id,
+        postId: req.params.postId,
         text: req.body.text,
         createdAt: new Date,
       });
@@ -40,7 +41,7 @@ const createComment = [
       await comment.save();
 
       res.status(200).json({
-        data: comment,
+        data: { comment },
         message: 'Comment created successfully.',
       });
     } catch (err) {
