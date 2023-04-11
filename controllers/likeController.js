@@ -1,4 +1,5 @@
 import Like from '../models/like.js';
+import Post from '../models/post.js';
 
 import { authenticateToken } from '../utils/auth.js';
 import { customError } from '../utils/error.js';
@@ -19,7 +20,10 @@ const likePost = [
         postId,
       });
   
-      await like.save();
+      await Promise.all([
+        Post.findByIdAndUpdate(postId, { $inc: { likesCount: 1 } }),
+        like.save(),
+      ]);
   
       res.json({
         data: { like },
@@ -32,7 +36,7 @@ const likePost = [
 ];
 
 const unlikePost = (req, res) => {
-  res.send('TODO: Implement unlike post');
+  
 };
 
 export default {
