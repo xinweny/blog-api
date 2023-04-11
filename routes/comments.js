@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import commentController from '../controllers/commentController.js';
 
-const commentRouter = Router();
+const commentRouter = Router({ mergeParams: true });
 
 commentRouter.get('/', commentController.getCommentsByPost);
 
