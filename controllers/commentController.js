@@ -2,6 +2,7 @@ import Comment from '../models/comment.js';
 
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizeComment, checkForValidationErrors } from '../utils/validators.js';
+import { customError } from '../utils/error.js';
 
 const getCommentsByPost = async (req, res, next) => {
   try {
@@ -48,9 +49,25 @@ const createComment = [
   },
 ];
 
-const deleteComment = (req, res) => {
-  res.send('TODO: Delete comment');
-};
+const deleteComment = [
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const comment = await Comment.findById(req.params.commentId);
+
+      if (req.user.id !== comment.userId.toString()) throw customError(401, 'Unauthorized');
+
+      await Comment.deleteOne(comment);
+
+      res.json({
+        data: { comment },
+        message: 'Comment successfully deleted.',
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
+];
 
 export default {
   getCommentsByPost,
