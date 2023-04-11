@@ -6,7 +6,7 @@ import { customError } from '../utils/error.js';
 
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find({ published: true });
 
     res.json({ data: { posts } });
   } catch (err) {
