@@ -21,8 +21,8 @@ const likePost = [
       });
   
       await Promise.all([
-        Post.findByIdAndUpdate(postId, { $inc: { likesCount: 1 } }),
         like.save(),
+        Post.findByIdAndUpdate(postId, { $inc: { likesCount: 1 } }),
       ]);
   
       res.json({
@@ -35,9 +35,26 @@ const likePost = [
   },
 ];
 
-const unlikePost = (req, res) => {
+const unlikePost = [
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const like = await Like.find({ userId: req.user.id, postId: req.params.postId });
+
+      await Promise.all([
+        Like.deleteOne(like),
+        Post.findByIdAndUpdate(req.params.postId, { $inc: { likesCount: -1 } }),
+      ]);
   
-};
+      res.json({
+        date: { like },
+        message: 'Post unliked successfully.'
+      });
+    } catch (err) {
+      return next(err);
+    }
+  },
+];
 
 export default {
   likePost,
