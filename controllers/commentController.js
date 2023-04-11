@@ -2,7 +2,6 @@ import Comment from '../models/comment.js';
 
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizeComment, checkForValidationErrors } from '../utils/validators.js';
-import { customError } from '../utils/error.js';
 
 const getCommentsByPost = async (req, res, next) => {
   try {
