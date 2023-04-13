@@ -1,5 +1,9 @@
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
+import compression from 'compression';
+import helmet from 'helmet';
+import RateLimit from 'express-rate-limit';
 
 import configMongoDB from './config/mongoConfig.js';
 import configPassport from './config/passportConfig.js';
@@ -13,6 +17,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(compression());
+app.use(helmet());
+app.use(RateLimit({ windowMs: 6000, max: 20 }));
 
 configPassport(app);
 
