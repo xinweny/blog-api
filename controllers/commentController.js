@@ -1,4 +1,5 @@
 import Comment from '../models/comment.js';
+import Post from '../models/post.js';
 
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizeComment, checkForValidationErrors } from '../utils/validators.js';
@@ -29,7 +30,6 @@ const createComment = [
   ...validateAndSanitizeComment(),
   checkForValidationErrors,
   async (req, res, next) => {
-    console.log(req.params);
     try {
       const comment = new Comment({
         userId: req.user.id,
@@ -38,7 +38,10 @@ const createComment = [
         createdAt: new Date,
       });
 
-      await comment.save();
+      await Promise.all([
+        comment.save(),
+        Post.findByIdAndUpdate(req.params.postId, { $inc: { commentsCount: 1 } }),
+      ]);
 
       res.status(200).json({
         data: { comment },
@@ -58,7 +61,10 @@ const deleteComment = [
 
       if (req.user.id !== comment.userId.toString()) throw customError(401, 'Unauthorized');
 
-      await Comment.deleteOne(comment);
+      await Promise.all([
+        comment.deleteOne(),
+        Post.findByIdAndUpdate(req.params.postId, { $inc: { commentsCount: -1 } }),
+      ]);
 
       res.json({
         data: { comment },
