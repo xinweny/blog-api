@@ -11,11 +11,9 @@ const getPosts = async (req, res, next) => {
     const sortQuery = includeKeys(req.query, ['likesCount', 'commentsCount', 'createdAt', 'updatedAt']);
 
     const posts = await Post.find(findQuery)
-      .find({
-        tags: {
-          $all: req.query.tags ? req.query.tags.split(',') : []
-        },
-      })
+      .find(req.query.tags
+        ? { tags: { $all: req.query.tags.split(',') } }
+        : {})
       .sort(sortQuery)
       .limit(req.query.limit ? Number(req.query.limit) : 100)
       .populate('author', 'username');
