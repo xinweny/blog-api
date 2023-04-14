@@ -6,7 +6,10 @@ import { customError } from '../utils/error.js';
 
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({ published: true }).populate('author', 'username');
+    const posts = await Post.find(req.query.find)
+      .sort(req.query.sort)
+      .limit(req.query.limit ? Number(req.query.limit) : 100)
+      .populate('author', 'username');
 
     res.json({ data: { posts } });
   } catch (err) {
