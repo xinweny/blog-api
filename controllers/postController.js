@@ -6,7 +6,7 @@ import { customError } from '../utils/error.js';
 
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({ published: true }).populate('userId', 'username');
+    const posts = await Post.find({ published: true }).populate('author', 'username');
 
     res.json({ data: { posts } });
   } catch (err) {
@@ -16,7 +16,7 @@ const getPosts = async (req, res, next) => {
 
 const getPostsByUser = async (req, res, next) => {
   try {
-    const posts = await Post.find({ userId: req.params.userId });
+    const posts = await Post.find({ author: req.params.userId });
 
     res.json({ data: { posts } });
   } catch (err) {
@@ -41,7 +41,7 @@ const createPost = [
   async (req, res, next) => {
     try {
       const post = new Post({
-        userId: req.user._id,
+        author: req.user._id,
         title: req.body.title,
         text: req.body.text,
         tags: req.body.tags ? req.body.tags.split(' ') : [],
@@ -69,7 +69,7 @@ const updatePost = [
     try {
       const post = await Post.findById(req.params.postId);
 
-      if (req.user.id !== post.userId.toString()) throw customError(401, 'Unauthorized');
+      if (req.user.id !== post.author.toString()) throw customError(401, 'Unauthorized');
   
       const updatedPost = await Post.findByIdAndUpdate(post.id, {
         title: req.body.title,
@@ -95,7 +95,7 @@ const deletePost = [
     try {
       const post = await Post.findById(req.params.postId);
 
-      if (req.user.id !== post.userId.toString()) throw customError(401, 'Unauthorized');
+      if (req.user.id !== post.author.toString()) throw customError(401, 'Unauthorized');
   
       await Post.deleteOne(post);
   

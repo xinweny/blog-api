@@ -7,7 +7,7 @@ import { customError } from '../utils/error.js';
 
 const getCommentsByPost = async (req, res, next) => {
   try {
-    const comments = await Comment.find({ postId: req.params.postId });
+    const comments = await Comment.find({ post: req.params.postId });
 
     res.json({ data: { comments } });
   } catch (err) {
@@ -17,7 +17,7 @@ const getCommentsByPost = async (req, res, next) => {
 
 const getCommentsByUser = async (req, res, next) => {
   try {
-    const comments = await Comment.find({ userId: req.params.userId });
+    const comments = await Comment.find({ author: req.params.userId });
 
     res.json({ data: { comments } });
   } catch (err) {
@@ -32,8 +32,8 @@ const createComment = [
   async (req, res, next) => {
     try {
       const comment = new Comment({
-        userId: req.user.id,
-        postId: req.params.postId,
+        author: req.user.id,
+        post: req.params.postId,
         text: req.body.text,
         createdAt: new Date,
       });
@@ -59,7 +59,7 @@ const deleteComment = [
     try {
       const comment = await Comment.findById(req.params.commentId);
 
-      if (req.user.id !== comment.userId.toString()) throw customError(401, 'Unauthorized');
+      if (req.user.id !== comment.author.toString()) throw customError(401, 'Unauthorized');
 
       await Promise.all([
         comment.deleteOne(),

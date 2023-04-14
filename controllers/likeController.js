@@ -8,21 +8,21 @@ const likePost = [
   authenticateToken,
   async (req, res, next) => {
     try {
-      const userId = req.user.id;
-      const { postId } = req.params;
+      const user = req.user.id;
+      const post = req.params.postId;
   
-      const likeExists = await Like.exists({ userId, postId });
+      const likeExists = await Like.exists({ user, post });
   
       if (likeExists) throw customError(400, 'User has already liked this post.');
   
       const like = new Like({
-        userId,
-        postId,
+        user,
+        post,
       });
   
       await Promise.all([
         like.save(),
-        Post.findByIdAndUpdate(postId, { $inc: { likesCount: 1 } }),
+        Post.findByIdAndUpdate(post, { $inc: { likesCount: 1 } }),
       ]);
   
       res.json({
@@ -39,7 +39,7 @@ const unlikePost = [
   authenticateToken,
   async (req, res, next) => {
     try {
-      const like = await Like.find({ userId: req.user.id, postId: req.params.postId });
+      const like = await Like.find({ user: req.user.id, post: req.params.postId });
 
       await Promise.all([
         Like.deleteOne(like),
