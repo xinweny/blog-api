@@ -5,6 +5,8 @@ const PostSchema = new Schema({
   title: { type: String, required: true, minLength: 1 },
   text: { type: String, required: true, minLength: 1 },
   likesCount: { type: Number, required: true, default: 0 },
+  commentsCount: { type: Number, required: true, default: 0 },
+  tags: [String],
   published: { type: Boolean, required: true },
   createdAt: { type: Date, required: true },
   updatedAt: { type: Date },
