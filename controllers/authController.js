@@ -52,7 +52,7 @@ const login = (req, res) => {
       );
 
       return res.json({
-        data: { user, token },
+        data: { token },
         message: 'User signed in successfully.',
       });
     }
