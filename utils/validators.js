@@ -42,16 +42,17 @@ const validateAndSanitizeUser = userModel => [
 
 const validateAndSanitizePost = () => [
   body('title')
-    .isLength({ min: 1 }).withMessage(`${capitalize('title')} is required.`).escape(),
+    .trim().isLength({ min: 1 }).withMessage(`${capitalize('title')} is required.`).escape(),
   body('text')
-    .isLength({ min: 1 }).withMessage(`${capitalize('username')} is required.`).escape(),
+    .trim().isLength({ min: 1 }).withMessage(`${capitalize('username')} is required.`).escape(),
+  body('tags').trim().escape(),
   body('published')
     .isBoolean(),
 ]
 
 const validateAndSanitizeComment = () => [
   body('text')
-  .isLength({ min: 1 }).withMessage(`${capitalize('title')} is required.`).escape(),
+    .trim().isLength({ min: 1 }).withMessage(`${capitalize('title')} is required.`).escape(),
 ];
 
 export {

@@ -6,7 +6,7 @@ import { customError } from '../utils/error.js';
 
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find({ published: true });
+    const posts = await Post.find({ published: true }).populate('userId', 'username');
 
     res.json({ data: { posts } });
   } catch (err) {
@@ -44,7 +44,7 @@ const createPost = [
         userId: req.user._id,
         title: req.body.title,
         text: req.body.text,
-        likesCount: 0,
+        tags: req.body.tags ? req.body.tags.split(' ') : [],
         published: req.body.published,
         createdAt: new Date(),
       });
@@ -74,6 +74,7 @@ const updatePost = [
       const updatedPost = await Post.findByIdAndUpdate(post.id, {
         title: req.body.title,
         text: req.body.text,
+        tags: req.body.tags ? req.body.tags.split(' ') : [],
         published: req.body.published,
         updatedAt: new Date(),
       }, { new: true });
