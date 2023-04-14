@@ -35,7 +35,7 @@ const validateAndSanitizeUser = userModel => [
     .normalizeEmail()
     .custom(checkIfExistsInDB(userModel, 'email')),
   body('password', 'Please enter password.').exists(),
-  body('confirm_password')
+  body('confirmPassword')
     .custom((value, { req }) => value === req.body.password)
     .withMessage('Passwords do not match.'),
 ];
