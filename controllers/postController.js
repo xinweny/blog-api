@@ -3,11 +3,20 @@ import Post from '../models/post.js';
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizePost, checkForValidationErrors } from '../utils/validators.js';
 import { customError } from '../utils/error.js';
+import { includeKeys } from '../utils/helpers.js';
 
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await Post.find(req.query.find)
-      .sort(req.query.sort)
+    const findQuery = includeKeys(req.query, ['title', 'published']);
+    const sortQuery = includeKeys(req.query, ['likesCount', 'commentsCount', 'createdAt', 'updatedAt']);
+
+    const posts = await Post.find(findQuery)
+      .find({
+        tags: {
+          $all: req.query.tags ? req.query.tags.split(',') : []
+        },
+      })
+      .sort(sortQuery)
       .limit(req.query.limit ? Number(req.query.limit) : 100)
       .populate('author', 'username');
 
