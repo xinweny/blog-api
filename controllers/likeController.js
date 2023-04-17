@@ -4,6 +4,16 @@ import Post from '../models/post.js';
 import { authenticateToken } from '../utils/auth.js';
 import { customError } from '../utils/error.js';
 
+const getLikesCount = async (req, res, next) => {
+  try {
+    const count = await Like.countDocuments({ post: req.body.postId });
+
+    res.json({ data: count });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 const likePost = [
   authenticateToken,
   async (req, res, next) => {
@@ -57,6 +67,7 @@ const unlikePost = [
 ];
 
 export default {
+  getLikesCount,
   likePost,
   unlikePost,
 };
