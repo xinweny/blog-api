@@ -18,7 +18,7 @@ const getPosts = async (req, res, next) => {
       .limit(req.query.limit ? Number(req.query.limit) : 100)
       .populate('author', 'username');
 
-    res.json({ data: { posts } });
+    res.json({ data: posts });
   } catch (err) {
     return next(err);
   }
@@ -28,7 +28,7 @@ const getPostsByUser = async (req, res, next) => {
   try {
     const posts = await Post.find({ author: req.params.userId });
 
-    res.json({ data: { posts } });
+    res.json({ data: posts });
   } catch (err) {
     return next(err);
   }
@@ -38,7 +38,7 @@ const getPost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId);
 
-    res.json({ data: { post } });
+    res.json({ data: post });
   } catch (err) {
     return next(err);
   }
@@ -90,7 +90,7 @@ const updatePost = [
       }, { new: true });
   
       res.json({
-        data: { post: updatedPost },
+        data: updatedPost,
         message: 'Post updated successfully.',
       });
     } catch (err) {
@@ -110,7 +110,7 @@ const deletePost = [
       await Post.deleteOne(post);
   
       res.json({
-        data: { post },
+        data: post,
         message: 'Post successfully deleted.',
       });
     } catch (err) {

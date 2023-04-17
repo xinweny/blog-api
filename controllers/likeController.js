@@ -26,7 +26,7 @@ const likePost = [
       ]);
   
       res.json({
-        data: { like },
+        data: like,
         message: 'Post liked by user successfully.',
       });
     } catch (err) {
@@ -47,7 +47,7 @@ const unlikePost = [
       ]);
   
       res.json({
-        date: { like },
+        date: like,
         message: 'Post unliked successfully.'
       });
     } catch (err) {

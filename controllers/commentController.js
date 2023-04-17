@@ -9,7 +9,7 @@ const getCommentsByPost = async (req, res, next) => {
   try {
     const comments = await Comment.find({ post: req.params.postId }).populate('author', 'username');
 
-    res.json({ data: { comments } });
+    res.json({ data: comments });
   } catch (err) {
     return next(err);
   }
@@ -19,7 +19,7 @@ const getCommentsByUser = async (req, res, next) => {
   try {
     const comments = await Comment.find({ author: req.params.userId });
 
-    res.json({ data: { comments } });
+    res.json({ data: comments });
   } catch (err) {
     return next(err);
   }
@@ -44,7 +44,7 @@ const createComment = [
       ]);
 
       res.status(200).json({
-        data: { comment },
+        data: comment,
         message: 'Comment created successfully.',
       });
     } catch (err) {
@@ -67,7 +67,7 @@ const deleteComment = [
       ]);
 
       res.json({
-        data: { comment },
+        data: comment,
         message: 'Comment successfully deleted.',
       });
     } catch (err) {
