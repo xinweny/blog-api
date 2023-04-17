@@ -36,7 +36,7 @@ const getPostsByUser = async (req, res, next) => {
 
 const getPost = async (req, res, next) => {
   try {
-    const post = await Post.findById(req.params.postId);
+    const post = await Post.findById(req.params.postId).populate('author', 'username');
 
     res.json({ data: { post } });
   } catch (err) {

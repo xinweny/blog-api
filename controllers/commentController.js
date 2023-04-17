@@ -7,7 +7,7 @@ import { customError } from '../utils/error.js';
 
 const getCommentsByPost = async (req, res, next) => {
   try {
-    const comments = await Comment.find({ post: req.params.postId });
+    const comments = await Comment.find({ post: req.params.postId }).populate('author', 'username');
 
     res.json({ data: { comments } });
   } catch (err) {
