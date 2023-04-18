@@ -7,7 +7,7 @@ import { includeKeys } from '../utils/helpers.js';
 
 const getPosts = async (req, res, next) => {
   try {
-    const findQuery = includeKeys(req.query, ['title', 'published']);
+    const findQuery = includeKeys(req.query, ['author', 'title', 'published']);
     const sortQuery = includeKeys(req.query, ['likesCount', 'commentsCount', 'createdAt', 'updatedAt']);
 
     const posts = await Post.find(findQuery)
