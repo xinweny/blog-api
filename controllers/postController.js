@@ -78,7 +78,7 @@ const updatePost = [
       const updatedPost = await Post.findByIdAndUpdate(post.id, {
         $set: {
           ...updateQuery,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
       }, { new: true });
   
