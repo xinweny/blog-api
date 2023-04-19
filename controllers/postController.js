@@ -70,13 +70,16 @@ const updatePost = [
       const post = await Post.findById(req.params.postId);
 
       if (req.user.id !== post.author.toString()) throw customError(401, 'Unauthorized');
+
+      req.body.tags = req.body.tags ? req.body.tags.split(' ') : [];
+
+      const updateQuery = includeKeys(req.body, ['title', 'text', 'published', 'tags']);
   
       const updatedPost = await Post.findByIdAndUpdate(post.id, {
-        title: req.body.title,
-        text: req.body.text,
-        tags: req.body.tags ? req.body.tags.split(' ') : [],
-        published: req.body.published,
-        updatedAt: new Date(),
+        $set: {
+          ...updateQuery,
+          updatedAt: new Date()
+        },
       }, { new: true });
   
       res.json({
