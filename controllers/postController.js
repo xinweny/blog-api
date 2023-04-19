@@ -24,16 +24,6 @@ const getPosts = async (req, res, next) => {
   }
 };
 
-const getPostsByUser = async (req, res, next) => {
-  try {
-    const posts = await Post.find({ author: req.params.userId });
-
-    res.json({ data: posts });
-  } catch (err) {
-    return next(err);
-  }
-}; 
-
 const getPost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId);
@@ -121,7 +111,6 @@ const deletePost = [
 
 export default {
   getPosts,
-  getPostsByUser,
   getPost,
   createPost,
   updatePost,

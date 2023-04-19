@@ -3,21 +3,14 @@ import Post from '../models/post.js';
 
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizeComment, checkForValidationErrors } from '../utils/validators.js';
+import { includeKeys } from '../utils/helpers.js';
 import { customError } from '../utils/error.js';
 
 const getCommentsByPost = async (req, res, next) => {
   try {
-    const comments = await Comment.find({ post: req.params.postId }).populate('author', 'username');
+    const findQuery = includeKeys(req.query, ['author', 'post', 'text']);
 
-    res.json({ data: comments });
-  } catch (err) {
-    return next(err);
-  }
-};
-
-const getCommentsByUser = async (req, res, next) => {
-  try {
-    const comments = await Comment.find({ author: req.params.userId });
+    const comments = await Comment.find(findQuery).populate('author', 'username');
 
     res.json({ data: comments });
   } catch (err) {
@@ -78,7 +71,6 @@ const deleteComment = [
 
 export default {
   getCommentsByPost,
-  getCommentsByUser,
   createComment,
   deleteComment,
 }
