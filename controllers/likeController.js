@@ -6,7 +6,7 @@ import { customError } from '../utils/error.js';
 
 const getLikesCount = async (req, res, next) => {
   try {
-    const count = await Like.countDocuments({ post: req.query.postId });
+    const count = await Like.countDocuments({ post: req.query.post });
 
     res.json({ data: count });
   } catch (err) {
