@@ -10,7 +10,13 @@ const getComments = async (req, res, next) => {
   try {
     const findQuery = includeKeys(req.query, ['author', 'post', 'text']);
 
-    const comments = await Comment.find(findQuery).populate('author', 'username');
+    let comments;
+
+    if (req.query.showPost === 'true') {
+      comments = await Comment.find(findQuery).populate('author', 'username').populate('post', 'title');
+    } else {
+      comments = await Comment.find(findQuery).populate('author', 'username');
+    }
 
     res.json({ data: comments });
   } catch (err) {
