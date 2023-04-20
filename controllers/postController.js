@@ -1,4 +1,6 @@
 import Post from '../models/post.js';
+import Comment from '../models/comment.js';
+import Like from '../models/like.js';
 
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizePost, checkForValidationErrors } from '../utils/validators.js';
@@ -100,7 +102,11 @@ const deletePost = [
 
       if (req.user.id !== post.author.toString()) throw customError(401, 'Unauthorized');
   
-      await Post.deleteOne(post);
+      await Promise.all([
+        Post.deleteOne(post),
+        Comment.deleteMany({ post: post._id }),
+        Like.deleteMany({ post: post._id }),
+      ]);
   
       res.json({
         data: post,
