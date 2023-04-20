@@ -6,7 +6,7 @@ import { validateAndSanitizeComment, checkForValidationErrors } from '../utils/v
 import { includeKeys } from '../utils/helpers.js';
 import { customError } from '../utils/error.js';
 
-const getCommentsByPost = async (req, res, next) => {
+const getComments = async (req, res, next) => {
   try {
     const findQuery = includeKeys(req.query, ['author', 'post', 'text']);
 
@@ -26,14 +26,14 @@ const createComment = [
     try {
       const comment = new Comment({
         author: req.user.id,
-        post: req.params.postId,
+        post: req.query.post,
         text: req.body.text,
         createdAt: new Date,
       });
 
       await Promise.all([
         comment.save(),
-        Post.findByIdAndUpdate(req.params.postId, { $inc: { commentsCount: 1 } }),
+        Post.findByIdAndUpdate(req.query.post, { $inc: { commentsCount: 1 } }),
       ]);
 
       res.status(200).json({
@@ -56,7 +56,7 @@ const deleteComment = [
 
       await Promise.all([
         comment.deleteOne(),
-        Post.findByIdAndUpdate(req.params.postId, { $inc: { commentsCount: -1 } }),
+        Post.findByIdAndUpdate(req.query.postId, { $inc: { commentsCount: -1 } }),
       ]);
 
       res.json({
@@ -70,7 +70,7 @@ const deleteComment = [
 ];
 
 export default {
-  getCommentsByPost,
+  getComments,
   createComment,
   deleteComment,
 }

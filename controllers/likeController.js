@@ -19,7 +19,7 @@ const likePost = [
   async (req, res, next) => {
     try {
       const user = req.user.id;
-      const post = req.params.postId;
+      const { post } = req.query.post;
   
       const likeExists = await Like.exists({ user, post });
   
@@ -49,11 +49,11 @@ const unlikePost = [
   authenticateToken,
   async (req, res, next) => {
     try {
-      const like = await Like.find({ user: req.user.id, post: req.params.postId });
+      const like = await Like.find({ user: req.user.id, post: req.query.post });
 
       await Promise.all([
         Like.deleteOne(like),
-        Post.findByIdAndUpdate(req.params.postId, { $inc: { likesCount: -1 } }),
+        Post.findByIdAndUpdate(req.query.post, { $inc: { likesCount: -1 } }),
       ]);
   
       res.json({

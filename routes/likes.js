@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import likeController from '../controllers/likeController.js';
 
-const likeRouter = Router({ mergeParams: true });
+const likeRouter = Router();
 
 likeRouter.get('/', likeController.getLikesCount);
 
