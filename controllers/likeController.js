@@ -7,13 +7,13 @@ import { customError } from '../utils/error.js';
 
 const getLikes = async (req, res, next) => {
   try {
+    const findQuery = includeKeys(req.query, ['user', 'post']);
+
     if (req.query.count === 'true') {
-      const count = await Like.countDocuments({ post: req.query.post });
+      const count = await Like.countDocuments({ findQuery });
 
       res.json({ data: count });
     } else {
-      const findQuery = includeKeys(req.query, ['user', 'post']);
-
       const likes = Like.find({ findQuery });
 
       res.json({ data: likes });
