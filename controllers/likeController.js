@@ -58,15 +58,12 @@ const unlikePost = [
   authenticateToken,
   async (req, res, next) => {
     try {
-      const like = await Like.find({ user: req.user.id, post: req.body.post });
-
       await Promise.all([
-        Like.deleteOne(like),
+        Like.findOneAndDelete({ user: req.user.id, post: req.body.post }),
         Post.findByIdAndUpdate(req.body.post, { $inc: { likesCount: -1 } }),
       ]);
   
       res.json({
-        data: like,
         message: 'Post unliked successfully.'
       });
     } catch (err) {
