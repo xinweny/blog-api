@@ -14,7 +14,7 @@ const getLikes = async (req, res, next) => {
 
       res.json({ data: count });
     } else {
-      const likes = Like.find({ findQuery });
+      const likes = await Like.find({ findQuery });
 
       res.json({ data: likes });
     }
