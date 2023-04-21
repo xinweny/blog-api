@@ -10,11 +10,11 @@ const getLikes = async (req, res, next) => {
     const findQuery = includeKeys(req.query, ['user', 'post']);
 
     if (req.query.count === 'true') {
-      const count = await Like.countDocuments({ findQuery });
+      const count = await Like.countDocuments(findQuery);
 
       res.json({ data: count });
     } else {
-      const likes = await Like.find({ findQuery });
+      const likes = await Like.find(findQuery);
 
       res.json({ data: likes });
     }
