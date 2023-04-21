@@ -14,12 +14,25 @@ const getLikesCount = async (req, res, next) => {
   }
 };
 
+const getLike = [
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const like = await Like.find({ user: req.user.id, post: req.query.post });
+
+      res.json({ data: like });
+    } catch (err) {
+      return next(err);
+    }
+  }
+];
+
 const likePost = [
   authenticateToken,
   async (req, res, next) => {
     try {
       const user = req.user.id;
-      const { post } = req.query.post;
+      const { post } = req.body;
   
       const likeExists = await Like.exists({ user, post });
   
@@ -68,6 +81,7 @@ const unlikePost = [
 
 export default {
   getLikesCount,
+  getLike,
   likePost,
   unlikePost,
 };
