@@ -4,9 +4,7 @@ import likeController from '../controllers/likeController.js';
 
 const likeRouter = Router();
 
-likeRouter.get('/', likeController.getLikesCount);
-
-likeRouter.get('/', likeController.getLike);
+likeRouter.get('/', likeController.getLikes);
 
 likeRouter.post('/', likeController.likePost);
 

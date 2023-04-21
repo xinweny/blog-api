@@ -2,30 +2,26 @@ import Like from '../models/like.js';
 import Post from '../models/post.js';
 
 import { authenticateToken } from '../utils/auth.js';
+import { includeKeys } from '../utils/helpers.js';
 import { customError } from '../utils/error.js';
 
-const getLikesCount = async (req, res, next) => {
+const getLikes = async (req, res, next) => {
   try {
-    const count = await Like.countDocuments({ post: req.query.post });
+    if (req.query.count === 'true') {
+      const count = await Like.countDocuments({ post: req.query.post });
 
-    res.json({ data: count });
+      res.json({ data: count });
+    } else {
+      const findQuery = includeKeys(req.body, ['user', 'post']);
+
+      const likes = Like.find({ findQuery });
+
+      res.json({ data: likes });
+    }
   } catch (err) {
     return next(err);
   }
 };
-
-const getLike = [
-  authenticateToken,
-  async (req, res, next) => {
-    try {
-      const like = await Like.find({ user: req.user.id, post: req.query.post });
-
-      res.json({ data: like });
-    } catch (err) {
-      return next(err);
-    }
-  }
-];
 
 const likePost = [
   authenticateToken,
@@ -80,8 +76,7 @@ const unlikePost = [
 ];
 
 export default {
-  getLikesCount,
-  getLike,
+  getLikes,
   likePost,
   unlikePost,
 };
