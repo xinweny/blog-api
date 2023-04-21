@@ -60,6 +60,35 @@ const createComment = [
   },
 ];
 
+const updateComment = [
+  authenticateToken,
+  ...validateAndSanitizeComment(),
+  checkForValidationErrors,
+  async (req, res, next) => {
+    try {
+      const comment = await Comment.findById(req.params.commentId);
+
+      if (req.user.id !== comment.author.toString()) throw customError(401, 'Unauthorized');
+
+      const updateQuery = includeKeys(req.body, ['text']);
+  
+      const updatedComment = await Comment.findByIdAndUpdate(comment.id, {
+        $set: {
+          ...updateQuery,
+          updatedAt: new Date(),
+        },
+      }, { new: true });
+  
+      res.json({
+        data: updatedComment,
+        message: 'Comment updated successfully.',
+      });
+    } catch (err) {
+      return next(err);
+    }
+  },
+];
+
 const deleteComment = [
   authenticateToken,
   async (req, res, next) => {
@@ -86,5 +115,6 @@ const deleteComment = [
 export default {
   getComments,
   createComment,
+  updateComment,
   deleteComment,
 }
