@@ -66,7 +66,7 @@ const unlikePost = [
       ]);
   
       res.json({
-        date: like,
+        data: like,
         message: 'Post unliked successfully.'
       });
     } catch (err) {
