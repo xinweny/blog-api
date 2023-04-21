@@ -8,6 +8,8 @@ commentRouter.get('/', commentController.getComments);
 
 commentRouter.post('/', commentController.createComment);
 
+commentRouter.put('/:commentId', commentController.updateComment);
+
 commentRouter.delete('/:commentId', commentController.deleteComment);
 
 export default commentRouter;
