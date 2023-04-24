@@ -45,12 +45,11 @@ const createPost = [
   checkForValidationErrors,
   async (req, res, next) => {
     try {
-      let cloudJson;
+      let cloudRes;
 
       if (req.file) {
-        const cloudRes = await upload(formatDataURI(req.file.buffer, req.file.mimetype));
-
-        cloudJson = await cloudRes.json();
+        cloudRes = await upload(formatDataURI(req.file.buffer, req.file.mimetype));
+        console.log(cloudRes);
       }
 
       const post = new Post({
@@ -59,7 +58,7 @@ const createPost = [
         text: req.body.text,
         tags: req.body.tags ? req.body.tags.split(' ') : [],
         published: req.body.published,
-        imageUrl: cloudJson ? cloudJson.secure_url : null,
+        imageUrl: req.file ? cloudRes.secure_url : null,
         createdAt: new Date(),
       });
   
