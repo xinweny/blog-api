@@ -39,10 +39,10 @@ const getPost = async (req, res, next) => {
 };
 
 const createPost = [
+  multer.single('imgFile'),
   authenticateToken,
   ...validateAndSanitizePost(),
   checkForValidationErrors,
-  multer.single('imgFile'),
   async (req, res, next) => {
     try {
       let cloudJson;
