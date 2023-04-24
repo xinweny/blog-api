@@ -27,7 +27,7 @@ app.use(RateLimit({ windowMs: 6000, max: 20 }));
 configPassport(app);
 
 // ROUTES
-app.get('/', (req, res) => res.redirect('api'));
+app.get('/', (req, res) => res.json({}));
 app.use('/api', apiRouter);
 
 // ERROR HANDLING
