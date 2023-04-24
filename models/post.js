@@ -8,6 +8,7 @@ const PostSchema = new Schema({
   commentsCount: { type: Number, required: true, default: 0 },
   tags: [String],
   published: { type: Boolean, required: true },
+  imgUrl: { type: String },
   createdAt: { type: Date, required: true },
   updatedAt: { type: Date },
 });
