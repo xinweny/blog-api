@@ -48,8 +48,7 @@ const createPost = [
       let cloudRes;
 
       if (req.file) {
-        cloudRes = await upload(formatDataURI(req.file.buffer, req.file.mimetype));
-        console.log(cloudRes);
+        cloudRes = await upload(formatDataURI(req.file.buffer, req.file.mimetype), 'post_images');
       }
 
       const post = new Post({
