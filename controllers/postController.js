@@ -39,14 +39,14 @@ const getPost = async (req, res, next) => {
 
 const createPost = [
   authenticateToken,
+  upload.multer.single('imgFile'),
   ...validateAndSanitizePost(),
   checkForValidationErrors,
-  upload.multer.single('imgFile'),
   async (req, res, next) => {
     try {
       let cloudJson;
 
-      if (req.body.imgFile) {
+      if (req.file) {
         const cloudRes = await upload.cloudinary(formatDataURI(req.file.buffer, req.file.mimetype));
 
         cloudJson = await cloudRes.json();
