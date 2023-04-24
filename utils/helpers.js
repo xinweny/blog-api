@@ -9,7 +9,14 @@ const includeKeys = (obj, incKeys) => {
     }, {});
 };
 
+const formatDataURI = (buffer, mimetype) => {
+  const b64 = Buffer.from(buffer).toString('base64');
+  const dataURI = `data:${mimetype};base64,${b64}`;
+  return dataURI;
+}
+
 export {
   capitalize,
   includeKeys,
+  formatDataURI,
 }

@@ -5,7 +5,8 @@ import Like from '../models/like.js';
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizePost, checkForValidationErrors } from '../utils/validators.js';
 import { customError } from '../utils/error.js';
-import { includeKeys } from '../utils/helpers.js';
+import { includeKeys, formatDataURI } from '../utils/helpers.js';
+import upload from '../utils/cloudinary.js';
 
 const getPosts = async (req, res, next) => {
   try {
@@ -40,14 +41,24 @@ const createPost = [
   authenticateToken,
   ...validateAndSanitizePost(),
   checkForValidationErrors,
+  upload.multer.single('imgFile'),
   async (req, res, next) => {
     try {
+      let cloudJson;
+
+      if (req.file) {
+        const cloudRes = await upload.cloudinary(formatDataURI(req.file.buffer, req.file.mimetype));
+
+        cloudJson = await cloudRes.json();
+      }
+
       const post = new Post({
         author: req.user._id,
         title: req.body.title,
         text: req.body.text,
         tags: req.body.tags ? req.body.tags.split(' ') : [],
         published: req.body.published,
+        imageUrl: cloudJson ? cloudJson.secure_url : null,
         createdAt: new Date(),
       });
   
