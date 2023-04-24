@@ -2,6 +2,7 @@ import Post from '../models/post.js';
 import Comment from '../models/comment.js';
 import Like from '../models/like.js';
 
+import multer from './config/multerConfig.js';
 import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizePost, checkForValidationErrors } from '../utils/validators.js';
 import { customError } from '../utils/error.js';
@@ -39,6 +40,7 @@ const getPost = async (req, res, next) => {
 
 const createPost = [
   authenticateToken,
+  multer.single('imgFile'),
   ...validateAndSanitizePost(),
   checkForValidationErrors,
   async (req, res, next) => {
