@@ -57,7 +57,7 @@ const createPost = [
         text: req.body.text,
         tags: req.body.tags ? req.body.tags.split(' ') : [],
         published: req.body.published,
-        imageUrl: req.file ? cloudRes.secure_url : null,
+        imgUrl: req.file ? cloudRes.secure_url : null,
         createdAt: new Date(),
       });
   
