@@ -7,6 +7,7 @@ import RateLimit from 'express-rate-limit';
 
 import configMongoDB from './config/mongoConfig.js';
 import configPassport from './config/passportConfig.js';
+import multer from './config/multerConfig.js';
 import { create404Error, handleErrors } from './config/errorsConfig.js';
 
 import apiRouter from './routes/api.js';
@@ -16,7 +17,7 @@ configMongoDB();
 const app = express();
 
 // Parsers
-app.use(express.json());
+app.use(multer.single());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
