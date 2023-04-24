@@ -39,8 +39,8 @@ const getPost = async (req, res, next) => {
 
 const createPost = [
   authenticateToken,
-  upload.multer.single('imgFile'),
   ...validateAndSanitizePost(),
+  upload.multer.single('imgFile'),
   checkForValidationErrors,
   async (req, res, next) => {
     try {
