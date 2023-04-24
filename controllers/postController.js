@@ -41,7 +41,7 @@ const createPost = [
   authenticateToken,
   ...validateAndSanitizePost(),
   checkForValidationErrors,
-  upload.multer.single(),
+  upload.multer.single('file'),
   async (req, res, next) => {
     try {
       let cloudJson;
