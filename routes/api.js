@@ -8,6 +8,8 @@ import likeRouter from './likes.js';
 
 const apiRouter = Router();
 
+apiRouter.get('/', (req, res) => res.json({}));
+
 apiRouter.use('/', authRouter);
 
 apiRouter.use('/users', userRouter);
