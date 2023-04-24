@@ -39,8 +39,8 @@ const getPost = async (req, res, next) => {
 };
 
 const createPost = [
-  authenticateToken,
   multer.single('imgFile'),
+  authenticateToken,
   ...validateAndSanitizePost(),
   checkForValidationErrors,
   async (req, res, next) => {
