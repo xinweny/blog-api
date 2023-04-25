@@ -124,6 +124,7 @@ const deletePost = [
         Post.deleteOne(post),
         Comment.deleteMany({ post: post._id }),
         Like.deleteMany({ post: post._id }),
+        post.imgUrl ? upload.destroy(getPublicId(post.imgUrl)) : Promise.resolve(),
       ]);
   
       res.json({
