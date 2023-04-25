@@ -55,7 +55,7 @@ const createPost = [
         author: req.user._id,
         title: req.body.title,
         text: req.body.text,
-        tags: req.body.tags,
+        tags: req.body.tags ? req.body.tags.split(' ') : [],
         published: req.body.published,
         imgUrl: req.file ? cloudRes.secure_url : null,
         createdAt: new Date(),
@@ -81,8 +81,11 @@ const updatePost = [
   async (req, res, next) => {
     try {     
       const post = await Post.findById(req.params.postId);
+      console.log(req.body.tags);
 
       if (req.user.id !== post.author.toString()) throw customError(401, 'Unauthorized');
+
+      req.body.tags = req.body.tags ? req.body.tags.split(' ') : [];
 
       let cloudRes;
 
