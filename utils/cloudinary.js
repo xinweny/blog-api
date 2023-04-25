@@ -15,8 +15,13 @@ const upload = async (file, folder, publicId) => {
   return res;
 };
 
-const destroy = async publicId => {
-  const res = await cloudinary.uploader.destroy(publicId);
+const destroy = async (folder, publicId) => {
+  const options = {
+    folder: `blog/${folder}`,
+    use_filename: true,
+  };
+
+  const res = await cloudinary.uploader.destroy(publicId, options);
 
   return res;
 }
