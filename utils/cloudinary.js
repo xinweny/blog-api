@@ -15,4 +15,13 @@ const upload = async (file, folder, publicId) => {
   return res;
 };
 
-export default upload;
+const destroy = async publicId => {
+  const res = await cloudinary.uploader.destroy(publicId);
+
+  return res;
+}
+
+export {
+  upload,
+  destroy,
+};

@@ -7,7 +7,7 @@ import { authenticateToken } from '../utils/auth.js';
 import { validateAndSanitizePost, checkForValidationErrors } from '../utils/validators.js';
 import { customError } from '../utils/error.js';
 import { includeKeys, formatDataURI, getPublicId } from '../utils/helpers.js';
-import upload from '../utils/cloudinary.js';
+import { upload, destroy } from '../utils/cloudinary.js';
 
 const getPosts = async (req, res, next) => {
   try {
@@ -124,7 +124,7 @@ const deletePost = [
         Post.deleteOne(post),
         Comment.deleteMany({ post: post._id }),
         Like.deleteMany({ post: post._id }),
-        post.imgUrl ? upload.destroy(getPublicId(post.imgUrl)) : Promise.resolve(),
+        post.imgUrl ? destroy(getPublicId(post.imgUrl)) : Promise.resolve(),
       ]);
   
       res.json({
