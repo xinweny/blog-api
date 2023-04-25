@@ -81,7 +81,6 @@ const updatePost = [
   async (req, res, next) => {
     try {     
       const post = await Post.findById(req.params.postId);
-      console.log(req.body.tags);
 
       if (req.user.id !== post.author.toString()) throw customError(401, 'Unauthorized');
 

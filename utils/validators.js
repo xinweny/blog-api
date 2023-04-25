@@ -45,7 +45,6 @@ const validateAndSanitizePost = () => [
     .trim().isLength({ min: 1 }).withMessage(`${capitalize('title')} is required.`).escape(),
   body('text')
     .trim().isLength({ min: 1 }).withMessage(`${capitalize('text')} is required.`).escape(),
-  body('tags').trim().escape(),
   body('published')
     .isBoolean(),
 ]
