@@ -55,7 +55,7 @@ const createPost = [
         author: req.user._id,
         title: req.body.title,
         text: req.body.text,
-        tags: req.body.tags ? req.body.tags.split(' ') : [],
+        tags: JSON.parse(req.body.tags),
         published: req.body.published,
         imgUrl: req.file ? cloudRes.secure_url : null,
         createdAt: new Date(),
@@ -85,8 +85,6 @@ const updatePost = [
 
       if (req.user.id !== post.author.toString()) throw customError(401, 'Unauthorized');
 
-      req.body.tags = req.body.tags ? req.body.tags.split(' ') : [];
-
       let cloudRes;
 
       if (req.file) {
@@ -94,11 +92,12 @@ const updatePost = [
         cloudRes = await upload(formatDataURI(req.file.buffer, req.file.mimetype), 'post_images', publicId);
       }
 
-      const updateQuery = includeKeys(req.body, ['title', 'text', 'published', 'tags']);
+      const updateQuery = includeKeys(req.body, ['title', 'text', 'published']);
   
       const updatedPost = await Post.findByIdAndUpdate(post.id, {
         $set: {
           ...updateQuery,
+          tags: JSON.parse(req.body.tags),
           updatedAt: new Date(),
           imgUrl: req.file ? cloudRes.secure_url : post.imgUrl,
         },
