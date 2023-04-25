@@ -15,8 +15,11 @@ const formatDataURI = (buffer, mimetype) => {
   return dataURI;
 }
 
+const getPublicId = url => url.split("/").slice(7).join("/").split(".")[0];
+
 export {
   capitalize,
   includeKeys,
   formatDataURI,
+  getPublicId,
 }
