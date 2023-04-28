@@ -75,8 +75,6 @@ const updateComment = [
       const updatedComment = await Comment.findByIdAndUpdate(comment.id, {
         $set: {
           ...updateQuery,
-          post: comment.post,
-          author: req.user.id,
           updatedAt: new Date(),
         },
       }, { new: true });
